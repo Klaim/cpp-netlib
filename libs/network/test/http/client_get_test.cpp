@@ -14,21 +14,22 @@ namespace http = network::http;
 #include <network/logging/logging.hpp>
 #include <fstream>
 
-class test_log_handler
-{
-public:
-	test_log_handler() : log_file( "cppnetlib.log" ) { }
-	void operator()( const network::logging::log_record& log )
+#ifdef NETWORK_ENABLE_LOGGING
+	class test_log_handler
 	{
-		const auto message = log.full_message();
-		std::cerr << message << std::endl;
-		log_file << message << std::endl;
-	}
+	public:
+		test_log_handler() : log_file( "cppnetlib.log" ) { }
+		void operator()( const network::logging::log_record& log )
+		{
+			const auto message = log.full_message();
+			std::cerr << message << std::endl;
+			log_file << message << std::endl;
+		}
 
-private:
+	private:
 
-	std::ofstream log_file;
-};
+		std::ofstream log_file;
+	};
 
 void setup_test_log()
 {
@@ -37,6 +38,9 @@ void setup_test_log()
 		handler(log);
 	} );
 }
+#else
+void setup_test_log(){}
+#endif
 
 BOOST_AUTO_TEST_CASE(http_client_get_test) {
 	setup_test_log();
