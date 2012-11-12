@@ -11,7 +11,35 @@
 namespace net = network;
 namespace http = network::http;
 
+#include <network/logging/logging.hpp>
+#include <fstream>
+
+class test_log_handler
+{
+public:
+	test_log_handler() : log_file( "cppnetlib.log" ) { }
+	void operator()( const network::logging::log_record& log )
+	{
+		const auto message = log.full_message();
+		std::cerr << message << std::endl;
+		log_file << message << std::endl;
+	}
+
+private:
+
+	std::ofstream log_file;
+};
+
+void setup_test_log()
+{
+	network::logging::set_log_record_handler( []( const network::logging::log_record& log ){ 
+		static test_log_handler handler; 
+		handler(log);
+	} );
+}
+
 BOOST_AUTO_TEST_CASE(http_client_get_test) {
+	setup_test_log();
     http::client::request request("http://www.google.com/");
     request << net::header("Connection", "close");
     http::client client_;
@@ -33,6 +61,7 @@ BOOST_AUTO_TEST_CASE(http_client_get_test) {
 #ifdef NETWORK_ENABLE_HTTPS
 
 BOOST_AUTO_TEST_CASE(https_client_get_test) {
+	setup_test_log();
     http::client::request request("https://www.google.com");
     request << net::header("Connection", "close");
     http::client client_;
