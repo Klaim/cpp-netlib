@@ -5,6 +5,11 @@
 
 include_directories(${CPP-NETLIB_SOURCE_DIR}/include)
 
+if(CPP-NETLIB_BUILD_SHARED_LIBS)
+    add_definitions(-DCPP-NETLIB_BUILD_SHARED_LIBS)
+endif()
+
+add_subdirectory(logging)
 add_subdirectory(uri)
 add_subdirectory(http)
 
