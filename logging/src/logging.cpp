@@ -10,6 +10,7 @@
 #include <iostream>
 #include <memory>
 #include <network/logging/logging.hpp>
+#include <network/utils/CharUtil.hpp>
 
 namespace network { namespace logging { 
 
@@ -22,7 +23,8 @@ namespace handler
   {
     void std_log_handler( const log_record& log )
     {
-      std::cerr << "[network " << log.filename() << ":" << log.line() << "] " 
+      network::util::CharUtil<char> charutil;
+      std::cerr << charutil.now() << charutil.sp_col_sp() << "[network " << log.filename() << ":" << log.line() << "] " 
                 << log.message() << std::endl;
     }
   }
