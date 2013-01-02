@@ -1,5 +1,6 @@
 # Copyright (c) Glyn Matthews 2011, 2012.
 # Copyright 2011 Dean Michael Berris (dberris@google.com)
+# Copyright 2012 A. Joel Lamotte (mjklaim@gmail.com)
 # Copyright 2011 Google, Inc.
 # Distributed under the Boost Software License, Version 1.0.
 #    (See accompanying file LICENSE_1_0.txt or copy at
@@ -21,25 +22,25 @@ if (${CMAKE_CXX_COMPILER_ID} MATCHES GNU)
 endif()
 
 if( CPP-NETLIB_ALWAYS_LOGGING )
-	add_definitions( /D NETWORK_ENABLE_LOGGING )
+  add_definitions( /D NETWORK_ENABLE_LOGGING )
 endif()
 
 if( NOT CPP-NETLIB_DISABLE_LOGGING )
-	set( CPP-NETLIB_LOGGING_SRCS 
-		logging/logging.cpp 
-	)
-	add_library(cppnetlib-logging ${CPP-NETLIB_LOGGING_SRCS})
-	foreach (src_file ${CPP-NETLIB_LOGGING_SRCS})
-	if (${CMAKE_CXX_COMPILER_ID} MATCHES GNU)
-		set_source_files_properties(${src_file}
-			PROPERTIES COMPILE_FLAGS ${CPP-NETLIB_CXXFLAGS})
-	endif()
-	endforeach(src_file)
-	
-	# this library name is defined only if we created the target
-	# if not then it will be empty
-	set( CPP-NETLIB_LOGGING_LIB cppnetlib-logging )
-	
+  set( CPP-NETLIB_LOGGING_SRCS 
+    logging/logging.cpp 
+  )
+  add_library(cppnetlib-logging ${CPP-NETLIB_LOGGING_SRCS})
+  foreach (src_file ${CPP-NETLIB_LOGGING_SRCS})
+  if (${CMAKE_CXX_COMPILER_ID} MATCHES GNU)
+    set_source_files_properties(${src_file}
+      PROPERTIES COMPILE_FLAGS ${CPP-NETLIB_CXXFLAGS})
+  endif()
+  endforeach(src_file)
+  
+  # this library name is defined only if we created the target
+  # if not then it will be empty
+  set( CPP-NETLIB_LOGGING_LIB cppnetlib-logging )
+  
 endif()
 
 set(CPP-NETLIB_URI_SRCS uri/uri.cpp uri/schemes.cpp uri/normalize.cpp)
@@ -83,7 +84,7 @@ endforeach(src_file)
 set(CPP-NETLIB_HTTP_MESSAGE_SRCS http/request.cpp http/response.cpp)
 add_library(cppnetlib-http-message ${CPP-NETLIB_HTTP_MESSAGE_SRCS})
 add_dependencies(cppnetlib-http-message
-  ${Boost_LIBRARIES}
+#   ${Boost_LIBRARIES}
   cppnetlib-message)
 target_link_libraries(cppnetlib-http-message
   ${Boost_LIBRARIES}
@@ -121,7 +122,6 @@ set(CPP-NETLIB_HTTP_SERVER_SRCS
     )
 add_library(cppnetlib-http-server ${CPP-NETLIB_HTTP_SERVER_SRCS})
 add_dependencies(cppnetlib-http-server
-  ${Boost_LIBRARIES}
   ${CPP-NETLIB_LOGGING_LIB}
   cppnetlib-constants
   cppnetlib-uri
@@ -131,6 +131,7 @@ add_dependencies(cppnetlib-http-server
   cppnetlib-http-message
   cppnetlib-http-message-wrappers
   cppnetlib-http-server-parsers
+  cppnetlib-utils-thread_pool
   )
 target_link_libraries(cppnetlib-http-server
   ${Boost_LIBRARIES}
@@ -143,6 +144,7 @@ target_link_libraries(cppnetlib-http-server
   cppnetlib-http-message
   cppnetlib-http-message-wrappers
   cppnetlib-http-server-parsers
+  cppnetlib-utils-thread_pool
   )
 foreach (src_file ${CPP-NETLIB_HTTP_SERVER_SRCS})
 if (${CMAKE_CXX_COMPILER_ID} MATCHES GNU)
@@ -174,7 +176,6 @@ set(CPP-NETLIB_HTTP_CLIENT_SRCS
     http/client.cpp)
 add_library(cppnetlib-http-client ${CPP-NETLIB_HTTP_CLIENT_SRCS})
 add_dependencies(cppnetlib-http-client
-  ${Boost_LIBRARIES}
   ${CPP-NETLIB_LOGGING_LIB}
   cppnetlib-constants
   cppnetlib-uri

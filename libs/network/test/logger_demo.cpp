@@ -22,7 +22,7 @@
 
 //This is an example of a class that needt to log.
 class Foo: public network::utils::log_base { //Define LoggingClass as a baseclass.
-     std::string mName;
+     std::string const mName;
   public:
      Foo(std::string name):mName(name){}
      //An additional constructor for constructor based dependency injection.

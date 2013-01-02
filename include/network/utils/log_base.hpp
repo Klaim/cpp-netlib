@@ -15,7 +15,7 @@ struct basic_log_base {
   static std::basic_ostream<CharType> *sLogStream;
   nullstreambuf<CharType> mNullStreamBuff;
   std::basic_ostream<CharType> mNullStream;
-  std::basic_ostream<CharType> *mLogStream;
+  std::basic_ostream<CharType> * mLogStream;
  protected:
   basic_log_base():mNullStreamBuff(),mNullStream(&mNullStreamBuff),mLogStream(sLogStream ? sLogStream : &mNullStream){}
   basic_log_base(std::basic_ostream<CharType> &logstream):mNullStreamBuff(),mNullStream(&mNullStreamBuff),mLogStream(&logstream){}
